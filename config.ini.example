@@ -1,30 +1,8 @@
-[Gateway]
-GID = 0
-Name = AgriGateway
+[Granary]
+Name = myname
 
 [Server]
 Base_URL = http://example.com
-XLab_URL = http://example.com
-Turtwig_URL = https://turtwig.com
-TurtwigJr_URL = https://turtwig.com
-Ething_URL = http://example.com
-
-[Turtwig]
-Upload = no
-Send_log = no
-
-[TurtwigJr]
-Upload = no
-Send_log = no
-
-[XLab]
-Upload = no
-Send_log = no
-
-[Ething]
-Upload = no
-Send_log = no
-GatewayID = Z1A00099
 
 [LogPath]
 File_path = /var/log/agriweather
