@@ -38,7 +38,7 @@ def get_datafile_name():
 
 def chk_datafile(dir_path: str, filename: str):
     bak_file = "{}/data/{}".format(dir_path, filename)
-    src_file = "{}/data/empty.db".format(dir_path)
+    src_file = "{}/data/empty.db.example".format(dir_path)
     try:
         if Path.is_file(src_file):
             if not Path.is_file(bak_file):
@@ -49,7 +49,7 @@ def chk_datafile(dir_path: str, filename: str):
             print("File empty.db wasn't exist!")
             # err_logger.error("File empty.db wasn't exist!")
     except Exception as e:
-        print("Exception:" + repr(e))
+        print("Check datafile Exception:" + repr(e))
         # err_logger.exception("Exception:" + repr(e))
 
 
@@ -85,4 +85,4 @@ if __name__ == "__main__":
         print("Temperature: " + str(sensor_data.temperature))
         print("Humidity: " + str(sensor_data.humidity))
         print("Battery: " + str(sensor_data.battery))
-        print("Device Data:" + device_data)
+        print(device_data)
