@@ -66,8 +66,9 @@ if __name__ == "__main__":
                 "rssi": 0,
             },
         }
-        local_storage.local_backup(device_data)
-        print("Temperature: " + str(sensor_data.temperature))
-        print("Humidity: " + str(sensor_data.humidity))
-        print("Battery: " + str(sensor_data.battery))
+        # print("Temperature: " + str(sensor_data.temperature))
+        # print("Humidity: " + str(sensor_data.humidity))
+        # print("Battery: " + str(sensor_data.battery))
         print(device_data)
+
+        local_storage.local_backup(device_data)

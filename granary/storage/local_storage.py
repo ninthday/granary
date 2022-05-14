@@ -38,9 +38,9 @@ class GranaryStorage:
 
         try:
             if device_data["type"] == "lywsd02mmc":
-                self._store_lywsd02mmc(device_data["data"])
+                self._store_lywsd02mmc(device_data["device_id"], device_data["data"])
             elif device_data["type"] == "lywsd03mmc":
-                self._store_lywsd03mmc(device_data["data"])
+                self._store_lywsd03mmc(device_data["device_id"], device_data["data"])
         except Exception as e:
             print("Exception:" + repr(e))
             raise
@@ -58,11 +58,11 @@ class GranaryStorage:
         )
         self._insert_sqlite(sql, params)
 
-    def _store_lywsd03mmc(self, data: dict):
+    def _store_lywsd03mmc(self, device_id: int, data: dict):
         sql = "INSERT INTO `lywsd03mmc` (`device_id`, `localts`, `air_temperature`, `air_humidity`, `battery`, `rssi`)\
                VALUES (?, ?, ?, ?, ?, ?);"
         params = (
-            data["device_id"],
+            device_id,
             data["local_timestamp"],
             data["air_temperature"],
             data["air_humidity"],
