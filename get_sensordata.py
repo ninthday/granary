@@ -37,12 +37,12 @@ def get_datafile_name():
 
 
 def chk_datafile(dir_path: str, filename: str):
-    bak_file = "{}/data/{}".format(dir_path, filename)
-    src_file = "{}/data/empty.db.example".format(dir_path)
+    bak_path = Path("{}/data/{}".format(dir_path, filename))
+    src_path = Path("{}/data/empty.db.example".format(dir_path))
     try:
-        if Path.is_file(src_file):
-            if not Path.is_file(bak_file):
-                copyfile(src_file, bak_file)
+        if src_path.exists:
+            if not bak_path.exists:
+                copyfile(src_path, bak_path)
                 print("Copy local backup file: {}!".format(filename))
                 # event_logger.event("Copy local backup file: {}!".format(filename))
         else:
