@@ -2,19 +2,37 @@
 
 import sqlite3
 from datetime import datetime
-
-from setuptools import sic
+from pathlib import Path
+from shutil import copyfile
 
 
 class GranaryStorage:
     def __init__(self, dir_path: str, sqlite_name: str):
         try:
-            conn_path = "{}/data/{}.db".format(dir_path, sqlite_name)
+            self.chk_datafile(dir_path, sqlite_name)
+
+            conn_path = "{}/data/{}".format(dir_path, sqlite_name)
             self.conn = sqlite3.connect(conn_path)
             self.cur = self.conn.cursor()
         except sqlite3.Error as e:
             print("An error occurred:", e.args[0])
             raise
+
+    def chk_datafile(self, dir_path: str, sqlite_name: str):
+        bak_path = Path("{}/data/{}".format(dir_path, sqlite_name))
+        src_path = Path("{}/data/empty.db.example".format(dir_path))
+        try:
+            if src_path.exists():
+                if not bak_path.exists():
+                    copyfile(src_path, bak_path)
+                    print("Copy local backup file: {}!".format(sqlite_name))
+                    # event_logger.event("Copy local backup file: {}!".format(filename))
+            else:
+                print("File empty.db wasn't exist!")
+                # err_logger.error("File empty.db wasn't exist!")
+        except Exception as e:
+            print("Check datafile Exception:" + repr(e))
+            # err_logger.exception("Exception:" + repr(e))
 
     def local_backup(self, device_data: dict):
 
