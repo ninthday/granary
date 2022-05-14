@@ -4,7 +4,10 @@ import json
 from bluepy.btle import BTLEDisconnectError
 from lywsd03mmc import Lywsd03mmcClient
 from pathlib import Path
-from time import sleep
+from shutil import copyfile
+from datetime import datetime
+from time import time, sleep
+from granary.storage.local_storage import GranaryStorage
 
 
 def get_data(mac_address: str):
@@ -25,10 +28,38 @@ def get_data(mac_address: str):
     return data
 
 
+def _get_now_time():
+    return datetime.strftime(datetime.now(), "%Y-%m-%d %H:%M:%S")
+
+
+def get_datafile_name():
+    return datetime.strftime(datetime.now(), "%Y-%m.db")
+
+
+def chk_datafile(dir_path: str, filename: str):
+    bak_file = "{}/data/{}".format(dir_path, filename)
+    src_file = "{}/data/empty.db".format(dir_path)
+    try:
+        if Path.is_file(src_file):
+            if not Path.is_file(bak_file):
+                copyfile(src_file, bak_file)
+                print("Copy local backup file: {}!".format(filename))
+                # event_logger.event("Copy local backup file: {}!".format(filename))
+        else:
+            print("File empty.db wasn't exist!")
+            # err_logger.error("File empty.db wasn't exist!")
+    except Exception as e:
+        print("Exception:" + repr(e))
+        # err_logger.exception("Exception:" + repr(e))
+
+
 if __name__ == "__main__":
     dir_path = Path(__file__).resolve().parent
     config = configparser.ConfigParser()
     config.read("{}/config.ini".format(dir_path))
+
+    datafile_name = get_datafile_name()
+    chk_datafile(dir_path, datafile_name)
 
     devices_filepath = "{}/devices.json".format(dir_path)
     try:
@@ -39,7 +70,19 @@ if __name__ == "__main__":
         devices = None
 
     for device in devices["lywsd03mmc"]:
-        data = get_data(device["mac"])
-        print("Temperature: " + str(data.temperature))
-        print("Humidity: " + str(data.humidity))
-        print("Battery: " + str(data.battery))
+        sensor_data = get_data(device["mac"])
+        device_data = {
+            "device_id": int(device["id"]),
+            "type": "lywsd03mmc",
+            "data": {
+                "local_timestamp": int(time()),
+                "air_temperature": sensor_data.temperature,
+                "air_humidity": sensor_data.humidity,
+                "battery": sensor_data.battery,
+                "rssi": 0,
+            },
+        }
+        print("Temperature: " + str(sensor_data.temperature))
+        print("Humidity: " + str(sensor_data.humidity))
+        print("Battery: " + str(sensor_data.battery))
+        print("Device Data:" + device_data)
