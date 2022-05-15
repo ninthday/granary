@@ -123,8 +123,10 @@ class GranaryStorage:
         local_data = self.cur.fetchall()
         return local_data
 
-    def get_device_data(self, table_name: str, device_id: int):
-        sql = "SELECT * FROM {} WHERE `device_id`={}".format(table_name, device_id)
+    def get_device_data(self, table_name: str, device_id: int, limit: int = 20):
+        sql = "SELECT * FROM {} WHERE `device_id`={} ORDER BY `localts` DESC LIMIT 0, {}".format(
+            table_name, device_id, limit
+        )
         self.cur.execute(sql)
         local_data = self.cur.fetchall()
         return local_data
