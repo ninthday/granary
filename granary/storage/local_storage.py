@@ -123,6 +123,12 @@ class GranaryStorage:
         local_data = self.cur.fetchall()
         return local_data
 
+    def get_device_data(self, table_name: str, device_id: int):
+        sql = "SELECT * FROM {} WHERE `device_id`={}".format(table_name, device_id)
+        self.cur.execute(sql)
+        local_data = self.cur.fetchall()
+        return local_data
+
     def del_data(self, table_name: str, row_id: int):
         """
         刪除指定資料表及編號的資料
