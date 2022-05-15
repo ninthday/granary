@@ -138,3 +138,6 @@ dmypy.json
 # local data
 data/*.db
 data/*.json
+
+# device Setting
+devices.json
