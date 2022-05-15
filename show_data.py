@@ -1,5 +1,6 @@
 import configparser
 import json
+from argparse import ArgumentParser
 from pathlib import Path
 from datetime import datetime
 from granary.storage.local_storage import GranaryStorage
@@ -14,6 +15,12 @@ def convertTimestamp(ts: int) -> str:
 
 
 if __name__ == "__main__":
+    parser = ArgumentParser(description="CrowdTangle list accounts")
+    parser.add_argument(
+        "-n", "--num", help="number of rows to show", dest="row_num", type=int
+    )
+    args = parser.parse_args()
+
     dir_path = Path(__file__).resolve().parent
     config = configparser.ConfigParser()
     config.read("{}/config.ini".format(dir_path))
@@ -32,7 +39,9 @@ if __name__ == "__main__":
     for device_type in devices:
         print("=== {} ===============".format(device_type))
         for device in devices[device_type]:
-            local_data = local_storage.get_device_data(device_type, device["id"])
+            local_data = local_storage.get_device_data(
+                device_type, device["id"], args.row_num
+            )
             print("Device ID: {}".format(device["id"]))
             for row_data in local_data:
                 print(
