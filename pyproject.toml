@@ -6,6 +6,8 @@ authors = ["Tuvix Shih <tuvix@ninthday.info>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+fastapi = "^0.78.0"
+uvicorn = "^0.17.6"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"

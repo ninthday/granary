@@ -3,15 +3,8 @@ import json
 from argparse import ArgumentParser
 from pathlib import Path
 from datetime import datetime
+from granary.common.convert import GranaryConvert
 from granary.storage.local_storage import GranaryStorage
-
-
-def get_datafile_name():
-    return datetime.strftime(datetime.now(), "%Y-%m.db")
-
-
-def convertTimestamp(ts: int) -> str:
-    return datetime.fromtimestamp(ts).strftime("%Y-%m-%d %H:%M:%S")
 
 
 if __name__ == "__main__":
@@ -25,7 +18,8 @@ if __name__ == "__main__":
     config = configparser.ConfigParser()
     config.read("{}/config.ini".format(dir_path))
 
-    datafile_name = get_datafile_name()
+    conv = GranaryConvert()
+    datafile_name = conv.get_datafile_name()
     local_storage = GranaryStorage(dir_path, datafile_name)
 
     devices_filepath = "{}/devices.json".format(dir_path)
@@ -48,7 +42,7 @@ if __name__ == "__main__":
                     "row: {row_id}, device: {device_id}, time: {data_time}, temperature: {temperature}, humidity: {humidity}, battery: {battery}".format(
                         row_id=row_data[0],
                         device_id=row_data[1],
-                        data_time=convertTimestamp(row_data[2]),
+                        data_time=conv.convert_timestamp(row_data[2]),
                         temperature=row_data[3],
                         humidity=row_data[4],
                         battery=row_data[5],
