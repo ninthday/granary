@@ -7,6 +7,12 @@ Installation
 sudo apt install python3-pip libglib2.0-dev
 ```
 
+## Add fastapi env on Pi
+```shell
+pip install fastapi
+pip install uvicorn
+```
+
 ## Run fastapi
 ```shell
 $ uvicorn main:app --reload --host 127.0.0.1 --port 8087
