@@ -46,12 +46,15 @@ class EventLogger:
     def event(self, msg: str) -> None:
         self._logger.info(msg)
 
-    def scan(self, device_type: str, device_id: int, scan_times: int) -> None:
+    def scanned(self, device_type: str, device_id: int, scan_times: int) -> None:
         self._logger.info(
             "Scanned {device_type}({device_id}) -> {scan_times} times.".format(
                 device_type=device_type, device_id=device_id, scan_times=scan_times
             )
         )
+
+    def start_scan(self) -> None:
+        self._logger.info("----- Start to scan devices and get data -----")
 
 
 class ErrorLogger:

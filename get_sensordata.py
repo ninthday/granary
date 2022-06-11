@@ -46,7 +46,7 @@ def get_data(mac_address: str, type: str, device_id: int) -> dict:
                 sensor_data["battery"] = data.battery
                 loop = False
                 del client
-                event_logger.scan("lywsd03mmc", device_id, try_times)
+                event_logger.scanned("lywsd03mmc", device_id, try_times)
             except BTLEDisconnectError as err:
                 print("Error:" + repr(err))
                 try_times += 1
@@ -65,7 +65,7 @@ def get_data(mac_address: str, type: str, device_id: int) -> dict:
 
                 loop = False
                 del client
-                event_logger.scan("lywsd02mmc", device_id, try_times)
+                event_logger.scanned("lywsd02mmc", device_id, try_times)
             except BTLEDisconnectError as err:
                 print("Error:" + repr(err))
                 try_times += 1
@@ -95,7 +95,10 @@ if __name__ == "__main__":
             devices = json.load(file)
     except FileNotFoundError as err:
         print("Exception:" + repr(err))
+        err_logger.error("Exception:" + repr(err))
         devices = None
+
+    event_logger.start_scan()
 
     if len(devices["lywsd03mmc"]) > 0:
         for device in devices["lywsd03mmc"]:
