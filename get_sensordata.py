@@ -9,9 +9,29 @@ from pathlib import Path
 from datetime import datetime
 from time import time, sleep
 from granary.storage.local_storage import GranaryStorage
+from granary.common.logging import EventLogger, ErrorLogger
 
 
-def get_data(mac_address: str, type: str) -> dict:
+def init():
+    global dir_path
+    global event_logger
+    global err_logger
+
+    dir_path = Path(__file__).resolve().parent
+
+    config = configparser.ConfigParser()
+    config.read("{}/config.ini".format(dir_path))
+
+    # 錯誤記錄檔
+    err_logger = ErrorLogger(config["LogPath"]["File_path"], config["Granary"]["Name"])
+
+    # 事件記錄檔
+    event_logger = EventLogger(
+        config["LogPath"]["File_path"], config["Granary"]["Name"]
+    )
+
+
+def get_data(mac_address: str, type: str, device_id: int) -> dict:
     try_times = 0
     loop = True
     sensor_data = {}
@@ -26,6 +46,7 @@ def get_data(mac_address: str, type: str) -> dict:
                 sensor_data["battery"] = data.battery
                 loop = False
                 del client
+                event_logger.scan("lywsd03mmc", device_id, try_times)
             except BTLEDisconnectError as err:
                 print("Error:" + repr(err))
                 try_times += 1
@@ -44,6 +65,7 @@ def get_data(mac_address: str, type: str) -> dict:
 
                 loop = False
                 del client
+                event_logger.scan("lywsd02mmc", device_id, try_times)
             except BTLEDisconnectError as err:
                 print("Error:" + repr(err))
                 try_times += 1
@@ -63,9 +85,6 @@ def get_datafile_name():
 
 
 if __name__ == "__main__":
-    dir_path = Path(__file__).resolve().parent
-    config = configparser.ConfigParser()
-    config.read("{}/config.ini".format(dir_path))
 
     datafile_name = get_datafile_name()
     local_storage = GranaryStorage(dir_path, datafile_name)
@@ -80,7 +99,7 @@ if __name__ == "__main__":
 
     if len(devices["lywsd03mmc"]) > 0:
         for device in devices["lywsd03mmc"]:
-            sensor_data = get_data(device["mac"], "lywsd03mmc")
+            sensor_data = get_data(device["mac"], "lywsd03mmc", device["id"])
             device_data = {
                 "device_id": int(device["id"]),
                 "type": "lywsd03mmc",
@@ -97,7 +116,7 @@ if __name__ == "__main__":
 
     if len(devices["lywsd02mmc"]) > 0:
         for device in devices["lywsd02mmc"]:
-            sensor_data = get_data(device["mac"], "lywsd02mmc")
+            sensor_data = get_data(device["mac"], "lywsd02mmc", device["id"])
             device_data = {
                 "device_id": int(device["id"]),
                 "type": "lywsd02mmc",

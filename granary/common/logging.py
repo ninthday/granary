@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-from fileinput import filename
 import logging
 from logging import handlers
 
@@ -45,11 +43,15 @@ class EventLogger:
         self._logger.setLevel(logging.WARNING)
         self._logger.addHandler(log_handler)
 
-    def event(self, msg):
+    def event(self, msg: str) -> None:
         self._logger.info(msg)
 
-    def scan(self, device_type, device_id, scan_times):
-        self._logger.info("")
+    def scan(self, device_type: str, device_id: int, scan_times: int) -> None:
+        self._logger.info(
+            "Scanned {device_type}({device_id}) -> {scan_times} times.".format(
+                device_type=device_type, device_id=device_id, scan_times=scan_times
+            )
+        )
 
 
 class ErrorLogger:
