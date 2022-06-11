@@ -40,7 +40,7 @@ class EventLogger:
         )
         log_handler.setFormatter(file_formatter)
         self._logger = logging.getLogger(self._logger_name)
-        self._logger.setLevel(logging.WARNING)
+        self._logger.setLevel(logging.INFO)
         self._logger.addHandler(log_handler)
 
     def event(self, msg: str) -> None:
