@@ -85,7 +85,7 @@ def get_datafile_name():
 
 
 if __name__ == "__main__":
-
+    init()
     datafile_name = get_datafile_name()
     local_storage = GranaryStorage(dir_path, datafile_name)
 
