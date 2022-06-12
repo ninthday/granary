@@ -49,10 +49,16 @@ def get_data(mac_address: str, type: str, device_id: int) -> dict:
                 event_logger.scanned("lywsd03mmc", device_id, try_times)
             except BTLEDisconnectError as err:
                 print("Error:" + repr(err))
-                try_times += 1
-                print("--> Try time: {}".format(try_times))
-                sleep(1)
-                continue
+                if try_times > 10:
+                    event_logger.event(
+                        "Scanned lywsd03mmc({}) more then 10 times.".format(device_id)
+                    )
+                    loop = False
+                else:
+                    try_times += 1
+                    print("--> Try time: {}".format(try_times))
+                    sleep(1)
+                    continue
     elif type == "lywsd02mmc":
         client = Lywsd02Client(mac_address)
         while loop:
@@ -68,10 +74,16 @@ def get_data(mac_address: str, type: str, device_id: int) -> dict:
                 event_logger.scanned("lywsd02mmc", device_id, try_times)
             except BTLEDisconnectError as err:
                 print("Error:" + repr(err))
-                try_times += 1
-                print("--> Try time: {}".format(try_times))
-                sleep(1)
-                continue
+                if try_times > 10:
+                    event_logger.event(
+                        "Scanned lywsd02mmc({}) more then 10 times.".format(device_id)
+                    )
+                    loop = False
+                else:
+                    try_times += 1
+                    print("--> Try time: {}".format(try_times))
+                    sleep(1)
+                    continue
 
     return sensor_data
 
