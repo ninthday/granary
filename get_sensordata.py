@@ -54,6 +54,7 @@ def get_data(mac_address: str, type: str, device_id: int) -> dict:
                         "Scanned lywsd03mmc({}) more then 10 times.".format(device_id)
                     )
                     loop = False
+                    del client
                 else:
                     try_times += 1
                     print("--> Try time: {}".format(try_times))
@@ -79,6 +80,7 @@ def get_data(mac_address: str, type: str, device_id: int) -> dict:
                         "Scanned lywsd02mmc({}) more then 10 times.".format(device_id)
                     )
                     loop = False
+                    del client
                 else:
                     try_times += 1
                     print("--> Try time: {}".format(try_times))
