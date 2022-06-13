@@ -50,9 +50,9 @@ def get_data(mac_address: str, type: str, device_id: int) -> dict:
                 event_logger.scanned("lywsd03mmc", device_id, try_times)
             except BTLEDisconnectError as err:
                 print("Error:" + repr(err))
-                if try_times > 10:
+                if try_times > 14:
                     event_logger.event(
-                        "Scanned lywsd03mmc({}) more then 10 times.".format(device_id)
+                        "Scanned lywsd03mmc({}) more then 15 times.".format(device_id)
                     )
                     loop = False
                     del client
@@ -76,9 +76,9 @@ def get_data(mac_address: str, type: str, device_id: int) -> dict:
                 event_logger.scanned("lywsd02mmc", device_id, try_times)
             except BTLEDisconnectError as err:
                 print("Error:" + repr(err))
-                if try_times > 10:
+                if try_times > 14:
                     event_logger.event(
-                        "Scanned lywsd02mmc({}) more then 10 times.".format(device_id)
+                        "Scanned lywsd02mmc({}) more then 15 times.".format(device_id)
                     )
                     loop = False
                     del client
