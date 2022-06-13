@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import configparser
+from distutils.log import error
 import json
 from threading import local
 from bluepy.btle import BTLEDisconnectError
@@ -113,37 +114,46 @@ if __name__ == "__main__":
         devices = None
 
     event_logger.start_scan()
+    try:
+        if len(devices["lywsd03mmc"]) > 0:
+            for device in devices["lywsd03mmc"]:
+                sensor_data = get_data(device["mac"], "lywsd03mmc", device["id"])
+                # check sensor_data is empty
+                if not sensor_data:
+                    continue
+                device_data = {
+                    "device_id": int(device["id"]),
+                    "type": "lywsd03mmc",
+                    "data": {
+                        "local_timestamp": int(time()),
+                        "air_temperature": sensor_data["temperature"],
+                        "air_humidity": sensor_data["humidity"],
+                        "battery": sensor_data["battery"],
+                        "rssi": 0,
+                    },
+                }
+                local_storage.local_backup(device_data)
+                print(device_data)
 
-    if len(devices["lywsd03mmc"]) > 0:
-        for device in devices["lywsd03mmc"]:
-            sensor_data = get_data(device["mac"], "lywsd03mmc", device["id"])
-            device_data = {
-                "device_id": int(device["id"]),
-                "type": "lywsd03mmc",
-                "data": {
-                    "local_timestamp": int(time()),
-                    "air_temperature": sensor_data["temperature"],
-                    "air_humidity": sensor_data["humidity"],
-                    "battery": sensor_data["battery"],
-                    "rssi": 0,
-                },
-            }
-            local_storage.local_backup(device_data)
-            print(device_data)
-
-    if len(devices["lywsd02mmc"]) > 0:
-        for device in devices["lywsd02mmc"]:
-            sensor_data = get_data(device["mac"], "lywsd02mmc", device["id"])
-            device_data = {
-                "device_id": int(device["id"]),
-                "type": "lywsd02mmc",
-                "data": {
-                    "local_timestamp": int(time()),
-                    "air_temperature": sensor_data["temperature"],
-                    "air_humidity": sensor_data["humidity"],
-                    "battery": sensor_data["battery"],
-                    "rssi": 0,
-                },
-            }
-            local_storage.local_backup(device_data)
-            print(device_data)
+        if len(devices["lywsd02mmc"]) > 0:
+            for device in devices["lywsd02mmc"]:
+                sensor_data = get_data(device["mac"], "lywsd02mmc", device["id"])
+                # check sensor_data is empty
+                if not sensor_data:
+                    continue
+                device_data = {
+                    "device_id": int(device["id"]),
+                    "type": "lywsd02mmc",
+                    "data": {
+                        "local_timestamp": int(time()),
+                        "air_temperature": sensor_data["temperature"],
+                        "air_humidity": sensor_data["humidity"],
+                        "battery": sensor_data["battery"],
+                        "rssi": 0,
+                    },
+                }
+                local_storage.local_backup(device_data)
+                print(device_data)
+    except Exception as err:
+        print("Exception:" + repr(err))
+        err_logger.error("Exception:" + repr(err))
