@@ -5,4 +5,4 @@ Name = myname
 Base_URL = http://example.com
 
 [LogPath]
-File_path = /var/log/agriweather
+File_path = /var/log/granary
