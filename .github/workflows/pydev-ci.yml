@@ -1,0 +1,29 @@
+name: Continuous Integration Python
+on:
+  pull_request:
+    branches:
+      - develop
+jobs:
+  python-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: "latest"
+
+      - name: Install Dependencies
+        run: poetry install --no-interaction --no-root
+
+      - name: Run Ruff Linter
+        run: poetry run ruff check --output-format=github
+
+      - name: Run Ruff Formater
+        run: poetry run ruff format --check --diff

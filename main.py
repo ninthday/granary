@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
-from pathlib import Path
-from fastapi import FastAPI
 from datetime import datetime
+from pathlib import Path
+
+from fastapi import FastAPI
+
 from granary.common.convert import GranaryConvert
 from granary.storage.local_storage import GranaryStorage
-
 
 app = FastAPI()
 
