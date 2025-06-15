@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 import configparser
-from distutils.log import error
 import json
-from threading import local
-from bluepy.btle import BTLEDisconnectError
-from lywsd03mmc import Lywsd03mmcClient
-from lywsd02 import Lywsd02Client
-from pathlib import Path
 from datetime import datetime
-from time import time, sleep
+from distutils.log import error
+from pathlib import Path
+from threading import local
+from time import sleep, time
+
+from bluepy.btle import BTLEDisconnectError
+from lywsd02 import Lywsd02Client
+from lywsd03mmc import Lywsd03mmcClient
+
+from granary.common.logging import ErrorLogger, EventLogger
 from granary.storage.local_storage import GranaryStorage
-from granary.common.logging import EventLogger, ErrorLogger
 
 
 def init():
@@ -106,7 +108,7 @@ if __name__ == "__main__":
 
     devices_filepath = "{}/devices.json".format(dir_path)
     try:
-        with open(devices_filepath, "r") as file:
+        with open(devices_filepath) as file:
             devices = json.load(file)
     except FileNotFoundError as err:
         print("Exception:" + repr(err))

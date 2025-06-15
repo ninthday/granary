@@ -1,11 +1,11 @@
 import configparser
 import json
 from argparse import ArgumentParser
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
 from granary.common.convert import GranaryConvert
 from granary.storage.local_storage import GranaryStorage
-
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="CrowdTangle list accounts")
@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
     devices_filepath = "{}/devices.json".format(dir_path)
     try:
-        with open(devices_filepath, "r") as file:
+        with open(devices_filepath) as file:
             devices = json.load(file)
     except FileNotFoundError as err:
         print("Exception:" + repr(err))

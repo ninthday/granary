@@ -35,7 +35,6 @@ class GranaryStorage:
             # err_logger.exception("Exception:" + repr(e))
 
     def local_backup(self, device_data: dict):
-
         try:
             if device_data["type"] == "lywsd02mmc":
                 self._store_lywsd02mmc(device_data["device_id"], device_data["data"])
@@ -46,8 +45,10 @@ class GranaryStorage:
             raise
 
     def _store_lywsd02mmc(self, device_id: int, data: dict):
-        sql = "INSERT INTO `lywsd02mmc` (`device_id`, `localts`, `air_temperature`, `air_humidity`, `battery`, `rssi`)\
+        sql = (
+            "INSERT INTO `lywsd02mmc` (`device_id`, `localts`, `air_temperature`, `air_humidity`, `battery`, `rssi`)\
                VALUES (?, ?, ?, ?, ?, ?);"
+        )
         params = (
             device_id,
             data["local_timestamp"],
@@ -59,8 +60,10 @@ class GranaryStorage:
         self._insert_sqlite(sql, params)
 
     def _store_lywsd03mmc(self, device_id: int, data: dict):
-        sql = "INSERT INTO `lywsd03mmc` (`device_id`, `localts`, `air_temperature`, `air_humidity`, `battery`, `rssi`)\
+        sql = (
+            "INSERT INTO `lywsd03mmc` (`device_id`, `localts`, `air_temperature`, `air_humidity`, `battery`, `rssi`)\
                VALUES (?, ?, ?, ?, ?, ?);"
+        )
         params = (
             device_id,
             data["local_timestamp"],
@@ -83,8 +86,8 @@ class GranaryStorage:
         tables_to_ignore = ["sqlite_sequence"]
         sql = "SELECT `name` FROM `sqlite_master` WHERE `type`='table'"
         self.cur.execute(sql)
-        tables = map(lambda t: t[0], self.cur.fetchall())
-        upload_tables = list()
+        tables = (t[0] for t in self.cur.fetchall())
+        upload_tables = []
         for table in tables:
             if table in tables_to_ignore:
                 continue
@@ -102,8 +105,8 @@ class GranaryStorage:
         tables_to_ignore = ["sqlite_sequence"]
         sql = "SELECT `name` FROM `sqlite_master` WHERE `type`='table'"
         self.cur.execute(sql)
-        tables = map(lambda t: t[0], self.cur.fetchall())
-        local_tables = list()
+        tables = (t[0] for t in self.cur.fetchall())
+        local_tables = []
         for table in tables:
             if table in tables_to_ignore:
                 continue
@@ -163,7 +166,7 @@ class AgriLocalFile:
         log_filename = "{}/data/future_data.log".format(self._dir_path)
         data_time = datetime.fromtimestamp(data_ts).strftime("%Y-%m-%d %H:%M:%S")
         with open(log_filename, "a") as outfile:
-            msg = "{0}--<<--{1}: {2}\n".format(read_time, data_time, data_string)
+            msg = "{}--<<--{}: {}\n".format(read_time, data_time, data_string)
             outfile.write(msg)
 
     def keep_garbled_data(self, read_time, garbled_text):
@@ -174,5 +177,5 @@ class AgriLocalFile:
         """
         log_filename = "{}/data/garbled_data.log".format(self._dir_path)
         with open(log_filename, "a") as outfile:
-            msg = "{0}: {1}\n".format(read_time, garbled_text)
+            msg = "{}: {}\n".format(read_time, garbled_text)
             outfile.write(msg)
