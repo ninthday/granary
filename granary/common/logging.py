@@ -11,7 +11,7 @@ class EventLogger:
     @logger_name.setter
     def logger_name(self, logger_name):
         if logger_name != "":
-            self._logger_name = "even.{0}".format(logger_name)
+            self._logger_name = "even.{}".format(logger_name)
         else:
             raise ValueError("The given logger name is empty!")
 
@@ -65,7 +65,7 @@ class ErrorLogger:
     @logger_name.setter
     def logger_name(self, logger_name):
         if logger_name != "":
-            self._logger_name = "err.{0}".format(logger_name)
+            self._logger_name = "err.{}".format(logger_name)
         else:
             raise ValueError("The given logger name is empty!")
 
