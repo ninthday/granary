@@ -1,0 +1,16 @@
+{
+    "devices": [
+        {
+            "friendly_name": "floor-th",
+            "type": "th_sensor"
+        },
+        {
+            "friendly_name": "floor-motion",
+            "type": "motion_sensor"
+        },
+        {
+            "friendly_name": "floor-plug",
+            "type": "smart_plug"
+        }
+    ]
+}

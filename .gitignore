@@ -141,3 +141,4 @@ data/*.json
 
 # device Setting
 devices.json
+zb_devices.json

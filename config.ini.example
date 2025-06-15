@@ -6,3 +6,9 @@ Base_URL = http://example.com
 
 [LogPath]
 File_path = /var/log/granary
+
+[MQTT]
+Broker = 127.0.0.1
+Port = 1883
+Username =
+Password =
